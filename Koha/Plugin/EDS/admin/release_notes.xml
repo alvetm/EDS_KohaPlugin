@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kohaplugin>
+	<latestversion>1.001</latestversion>
+	<download>http://widgets.ebscohost.com/dev/api/koha/EDS_Plugin_1.001.kpz</download>
+	<lastupdated>11/Nov/2013</lastupdated>
+	<releasenotes>
+		<release version="1.001">
+			<note id="1" author="amiranda@ebsco.com">Fixed detailed record next previous links. Clicking from a EDS detailed record to Koha record lead to a 404 response</note>
+			<note id="2" author="amiranda@ebsco.com">Added a default value to the getParams sub as it was throwing an error if no results were returned</note>
+			<note id="3" author="amiranda@ebsco.com">Auto Info update always failed as it was using an old authtoken. Getting a new token if info throws an error.</note>
+			<note id="3" author="amiranda@ebsco.com">added {OR RECORD.FullText.CustomLinks} in the custom links section of results.tt as it was not displaying a custom link</note>
+		</release>
+		<release version="1.0">
+			<note id="1" author="amiranda@ebsco.com">Updated plugin to be self containing. No need to copy files into the core directories any more. Used is_plugin parameter to manage template paths and .htaccess to run .pl files. Steps: Install plugin and run chmod 755 eds-* in the opac folder.</note>
+			<note id="2" author="amiranda@ebsco.com">Added expanders and date limiter</note>
+			<note id="3" author="amiranda@ebsco.com">Added results per page, view mode, search mode to form resort</note>
+		</release>
+		<release version="0.9">
+			<note id="1" author="amiranda@ebsco.com">Added Setup tool in Plugin Admin with basic instructions on how to deploy the plugin</note>
+			<note id="2" author="amiranda@ebsco.com">Made API guest access configurable. User logs into to EDS after they login to Koha automatically.</note>
+			<note id="3" author="amiranda@ebsco.com">Added update Info feature in Plugin configuration to get info manually</note>
+			<note id="4" author="amiranda@ebsco.com">Added feature to update EDS Info once a day.</note>
+		</release>
+		<release version="0.8">
+			<note id="1" author="amiranda@ebsco.com">Select options are configurable from the plugin panel </note>
+			<note id="2" author="amiranda@ebsco.com">Added Default (without EDS) option to config settings </note>
+			<note id="3" author="amiranda@ebsco.com">Relevency is based on info </note>
+		</release>
+	</releasenotes>
+</kohaplugin>
