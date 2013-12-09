@@ -54,9 +54,6 @@ require 'eds-methods.pl';
 my $PluginDir = dirname(abs_path($0));
 $PluginDir =~s /EDS\/opac/EDS/;
 
-my $input = new CGI;
-my $dbh   = C4::Context->dbh;
-
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -90,7 +87,7 @@ if($input->param("q") eq 'config'){
 	if($input->param("q") eq 'knownitems'){
 		my $EDSInfo;
 		try{
-			$EDSInfo =  decode_json(EDSGetInfo());
+			$EDSInfo =  decode_json(EDSGetInfo(0));
 			$api_response = encode_json($EDSInfo->{AvailableSearchCriteria}->{AvailableSearchFields});
 		}catch{
 			EDSSearch('info');

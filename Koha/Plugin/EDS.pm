@@ -10,8 +10,8 @@ package Koha::Plugin::EDS;
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 31/10/2013
-#* LAST CHANGE DESCRIPTION: Added 1 Tool Step
+#* DATE MODIFIED: 04/Dec/2013
+#* LAST CHANGE DESCRIPTION: Plugin is configurable through syspref now.
 #=============================================================================================
 #*/
 
@@ -28,7 +28,7 @@ my $PluginDir = C4::Context->config("pluginsdir");
 $PluginDir = $PluginDir.'/Koha/Plugin/EDS';
 
 ## Here we set our plugin version
-our $VERSION = 1.001;
+our $VERSION = 1.002;
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
@@ -37,7 +37,7 @@ our $metadata = {
     description =>
 'This plugin integrates EBSCO Discovery Service(EDS) in Koha.<p>Go to Configure(right) to configure the API Plugin first then Run tool (left) for setup instructions.</p><p>For assistance; email EBSCO support at <a href="mailto:support@ebscohost.com">support@ebscohost.com</a> or call the toll free international hotline at +800-3272-6000</p>',
     date_authored   => '2013-10-27',
-    date_updated    => '2013-11-11',
+    date_updated    => '2013-12-04',
     minimum_version => '3.1202000',
     maximum_version => undef,
     version         => $VERSION,
@@ -174,6 +174,7 @@ sub install() {
 #		`edsvalue` TEXT NOT NULL, 
 #		PRIMARY KEY (`edsid`)) ENGINE = INNODB;
 #    " ); 
+	return C4::Context->dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `explanation`, `type`) VALUES ('EDSEnabled', '1', 'If ON, enables searching with EDS - Plugin required.For assistance; email EBSCO support at support\@ebscohost.com', 'YesNo') ON DUPLICATE KEY UPDATE `variable`='EDSEnabled', `value`=1, `explanation`='If ON, enables searching with EDS - Plugin required.For assistance; email EBSCO support at support\@ebscohost.com', `type`='YesNo'");
 }
 
 
@@ -183,6 +184,7 @@ sub uninstall() {
 #    my $table = $self->get_qualified_table_name('config');
 
 #    return C4::Context->dbh->do("DROP TABLE $table");
+	return C4::Context->dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `explanation`, `type`) VALUES ('EDSEnabled', '0', 'If ON, enables searching with EDS - Plugin required.For assistance; email EBSCO support at support\@ebscohost.com', 'YesNo') ON DUPLICATE KEY UPDATE `variable`='EDSEnabled', `value`=1, `explanation`='If ON, enables searching with EDS - Plugin required.For assistance; email EBSCO support at support\@ebscohost.com', `type`='YesNo'");
 }
 
 sub SetupTool {

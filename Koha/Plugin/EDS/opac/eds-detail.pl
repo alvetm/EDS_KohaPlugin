@@ -81,7 +81,7 @@ if($GuestTracker eq ''){
 my $format = $cgi->param("format") || 'html';
 
 
-my $EDSInfo =  decode_json(EDSGetInfo());
+my $EDSInfo =  decode_json(EDSGetInfo(0));
 my $EDSConfig = decode_json(EDSGetConfiguration());
 my $CookieExpiry = '+'.$EDSConfig->{cookieexpiry}.'m';
 if($EDSConfig->{cookieexpiry} eq ' '){ # dont set expiry

@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 11/11/2013
-#* LAST CHANGE DESCRIPTION: getParam sub returns '' if parm doesnt match.
+#* DATE MODIFIED: 1/12/2013
+#* LAST CHANGE DESCRIPTION: FIXED: ailc/limiters dont work if default=y
 #=============================================================================================
 #*/
 
@@ -71,7 +71,7 @@ $PluginDir =~s /EDS\/opac/EDS/;
 my $cgi = new CGI;
 my $format = $cgi->param("format") || 'html';
 
-my $EDSInfo =  decode_json(EDSGetInfo());
+my $EDSInfo =  decode_json(EDSGetInfo(0));
 my $EDSConfig = decode_json(EDSGetConfiguration());
 my $CookieExpiry = '+'.$EDSConfig->{cookieexpiry}.'m';
 if($EDSConfig->{cookieexpiry} eq ' '){ # dont set expiry
@@ -189,7 +189,7 @@ if($cgi->param("q")){
 			$template->param(
 	     searchdesc     => 1,
 	    total  => 0,);
-		#use Data::Dumper; die Dumper $EDSResponse;
+	#	use Data::Dumper; die Dumper $EDSResponse;
 	};
 }
 # Pager template params
@@ -282,7 +282,8 @@ sub EDSProcessResults
 	@EDSResults = @{$EDSResponse->{SearchResult}->{Data}->{Records}}; 
 	foreach my $Result (@EDSResults){
 		foreach my $Items ($Result->{Items}){
-			try{
+			try
+			{
 				my @Items = @{$Items};
 				foreach my $Item (@Items){
 					$Item = EDSProcessItem($Item);
@@ -291,10 +292,12 @@ sub EDSProcessResults
 						$CatalogueRecordId=~s/\w+\.//;
 						$Item->{CatData} = GetCatalogueAvailability($CatalogueRecordId);
 						$Item->{CatData} =~s/pl\?biblionumber\=/pl\?resultid\=$Result->{ResultId}\&biblionumber\=/;
+						$Item->{CatData} =~s/(<a[^<]+?>)(.*?)(<\/a>)/$1$Item->{Data}$3/; # replace title for highlights
 					}
 				}
-			}catch{
 			}
+			catch
+			{}
 
 		}
 	}	
@@ -370,30 +373,31 @@ sub EDSProcessQueries
 sub EDSProcessLimiters #e.g. AiLC, Cat only etc.
 {
 	@EDSLimiters = @{$EDSInfo->{AvailableSearchCriteria}->{AvailableLimiters}};
+	#use Data::Dumper; die Dumper @EDSLimiters;
 	foreach my $Limiter (@EDSLimiters)
 	{
 		if($Limiter->{Type} eq 'select')
 		{
-			if($Limiter->{DefaultOn} eq 'n')
+			#if($Limiter->{DefaultOn} eq 'n')
 			{
 				#warn "no limiters";
 				$Limiter->{Label} = '<input type="checkbox" disabled > '.$Limiter->{Label};		
 				$Limiter->{AddAction} =~s/value/y/;
 				$Limiter->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$Limiter->{AddAction};
 
-					try{
+				try{
 					my @EDSRemoveLimiters = @{$EDSResponse->{SearchRequestGet}->{SearchCriteriaWithActions}->{LimitersWithAction}};					
-						foreach my $EDSRemoveLimiter (@EDSRemoveLimiters)
-						{
-							if($EDSRemoveLimiter->{Id} eq $Limiter->{Id}){
-								$Limiter->{AddAction} =~s/y/n/;
-								$Limiter->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$EDSRemoveLimiter->{RemoveAction};
-								$Limiter->{Label} =~s/disabled/disabled checked/;
-							}
+					foreach my $EDSRemoveLimiter (@EDSRemoveLimiters)
+					{
+						if($EDSRemoveLimiter->{Id} eq $Limiter->{Id}){
+							$Limiter->{AddAction} =~s/y/n/;
+							$Limiter->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$EDSRemoveLimiter->{RemoveAction};
+							$Limiter->{Label} =~s/disabled/disabled checked/;
 						}
-					} catch {
-						warn 'no limiters';
-					};
+					}
+				} catch {
+					warn 'no limiters';
+				};
 			}
 		}
 		

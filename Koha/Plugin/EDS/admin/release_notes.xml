@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <kohaplugin>
-	<latestversion>1.001</latestversion>
-	<download>http://widgets.ebscohost.com/dev/api/koha/EDS_Plugin_1.001.kpz</download>
-	<lastupdated>11/Nov/2013</lastupdated>
+	<latestversion>1.002</latestversion>
+	<download>http://widgets.ebscohost.com/dev/api/koha/EDS_Plugin_1.002.kpz</download>
+	<lastupdated>03/Dec/2013</lastupdated>
 	<releasenotes>
+		<release version="1.002">
+			<note id="1" author="amiranda@ebsco.com">Fixed highlight issues for catalogue records</note>
+			<note id="2" author="amiranda@ebsco.com">Fixed issue when searching with ,:()</note>
+			<note id="3" author="amiranda@ebsco.com">Fixed issue with not logged in message when logged in</note>
+			<note id="4" author="amiranda@ebsco.com">Fixed issue where checkbox does not display if a limiter is set to on. </note>
+			<note id="5" author="amiranda@ebsco.com">Fixed: pdf not opening automatically when accessed from result page. </note>
+			<note id="6" author="amiranda@ebsco.com">Added EDSEnabled in Syspref, replace auth.pm, opac-basket.tt and doc-head-close.inc instead of patch. </note>
+			<note id="7" author="amiranda@ebsco.com">Disabled multi-select dropdown when switching </note>
+			<note id="8" author="amiranda@ebsco.com">Resolved uninitialized variable warnings in logs </note>
+		</release>
 		<release version="1.001">
 			<note id="1" author="amiranda@ebsco.com">Fixed detailed record next previous links. Clicking from a EDS detailed record to Koha record lead to a 404 response</note>
 			<note id="2" author="amiranda@ebsco.com">Added a default value to the getParams sub as it was throwing an error if no results were returned</note>
 			<note id="3" author="amiranda@ebsco.com">Auto Info update always failed as it was using an old authtoken. Getting a new token if info throws an error.</note>
-			<note id="3" author="amiranda@ebsco.com">added {OR RECORD.FullText.CustomLinks} in the custom links section of results.tt as it was not displaying a custom link</note>
+			<note id="4" author="amiranda@ebsco.com">added {OR RECORD.FullText.CustomLinks} in the custom links section of results.tt as it was not displaying a custom link</note>
 		</release>
 		<release version="1.0">
 			<note id="1" author="amiranda@ebsco.com">Updated plugin to be self containing. No need to copy files into the core directories any more. Used is_plugin parameter to manage template paths and .htaccess to run .pl files. Steps: Install plugin and run chmod 755 eds-* in the opac folder.</note>

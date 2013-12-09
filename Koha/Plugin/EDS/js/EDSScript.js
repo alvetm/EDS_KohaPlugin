@@ -8,8 +8,9 @@
 * URL: N/A
 * AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 * DATE ADDED: 31/10/2013
-* DATE MODIFIED: 03/11/2013
-* LAST CHANGE DESCRIPTION: Added window.error.
+* DATE MODIFIED: 03/Dec/2013
+* LAST CHANGE DESCRIPTION: Fixed: pdf not opening automatically when accessed from result page.
+*							removed multi-select display for known items at switch.
 =============================================================================================
 */
 
@@ -123,26 +124,27 @@ function SetKoha(showInfo){
 }
 
 function ShowInfo(msg){
-	$('#masthead_search').css('z-index',1000);
-	$('#masthead_search').attr('size',8);
+	//$('#masthead_search').css('z-index',1000);
+	//$('#masthead_search').attr('size',8);
 	var topPos = $('#masthead_search').offset().top;
 	var leftPos = $('#masthead_search').offset().left;
-	var selectWidth = $('#masthead_search').width()+18;
+	//var selectWidth = $('#masthead_search').width()+18;
 	var cartMsg = $("#cartDetails").html();
-	$('#masthead_search').css('position','absolute');
-	$('#masthead_search').css('left',topPos+'px');
-	$('#masthead_search').css('left',leftPos+'px');
+	//$('#masthead_search').css('position','absolute');
+	//$('#masthead_search').css('left',topPos+'px');
+	//$('#masthead_search').css('left',leftPos+'px');
 	if(activeState==0){
 		activeState=1;
-		$('label[for="masthead_search"]').width($('label[for="masthead_search"]').width()+selectWidth);}
-	setTimeout(function(){
+		//$('label[for="masthead_search"]').width($('label[for="masthead_search"]').width()+selectWidth);
+	}
+	/*setTimeout(function(){
 		$('#masthead_search').attr('size',0);
 		$('#masthead_search').css('left','');
 		$('#masthead_search').css('top','');
 		$('#masthead_search').css('position','');
-		$('label[for="masthead_search"]').width($('label[for="masthead_search"]').width()-selectWidth);
+		//$('label[for="masthead_search"]').width($('label[for="masthead_search"]').width()-selectWidth);
 		activeState=0;
-		},3000);
+		},3000);*/
 	$("#cartDetails").html(msg);
 	showCart();
 	$("#cartDetails").css('left',leftPos+'px');
@@ -156,7 +158,7 @@ function ShowInfo(msg){
 function SearchEDS(){
   var searchTerm = $('#transl1').val();
   if(knownItem=='eds'){knownItem='';}
-  window.location='/plugin/Koha/Plugin/EDS/opac/eds-search.pl?q=Search?query-1=AND,'+knownItem+':'+searchTerm+'&default=1';
+  window.location='/plugin/Koha/Plugin/EDS/opac/eds-search.pl?q=Search?query-1=AND,'+knownItem+':{'+searchTerm+'}&default=1';
 }
 
 function EDSGetRecord(recordURL,callingObjParent){
@@ -196,6 +198,7 @@ function EDSAppendToBrowse(data){
 		maxResultId = data.SearchResult.Data.Records[i].ResultId;
 		}catch(e){
 				searchResults += '<li title="Go to detail" class="highlight" >'+data.SearchResult.Data.Records[i].ResultId+'. <span class="">Login to gain access to this result.</span></li>';
+				$('.FullTextLoader').css('display','none');
 		}
 	}
 	if(maxResultId<totalHits){
@@ -242,7 +245,7 @@ function EDSSetDetailPageNavigator(){
 	}
 	if(QueryString('fulltext')==1){
 		$('.customLink').each(function(){
-			if($(this).text()=="PDF Full Text"){
+			if($(this).text().trim()=="PDF Full Text"){
 				$('.FullTextLoader').css('display','block');
 				window.location.href=$(this).attr('href');
 				return false;

@@ -42,11 +42,11 @@ use URI::Escape;
 use HTML::Entities;
 use feature qw(switch);
 use Encode;
-		use Data::Dumper;
+
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
 
-my ( $edsusername, $edsprofileid, $edspassword, $edscustomerid, $defaultsearch, $cookieexpiry, $cataloguedbid, $catalogueanprefix, $authtoken, $edsinfo, $lastedsinfoupdate, $edsswitchtext, $kohaswitchtext, $edsselecttext, $edsselectinfo, $kohaselectinfo, $instancepath, $themelangforplugin, $defaultEDSQuery)="";
+my ( $edsusername, $edsprofileid, $edspassword, $edscustomerid, $defaultsearch, $cookieexpiry, $cataloguedbid, $catalogueanprefix, $authtoken, $edsinfo, $lastedsinfoupdate, $edsswitchtext, $kohaswitchtext, $edsselecttext, $edsselectinfo, $kohaselectinfo, $instancepath, $themelangforplugin, $defaultEDSQuery, $SessionToken, $GuestTracker)="";
 
 my $PluginClass='Koha::Plugin::EDS';
 my $table='plugin_data';
@@ -102,8 +102,8 @@ my ( $template, $user, $cookie ) = get_template_and_user(
     }
 );
 #manage guest status.
-my $SessionToken = $input->cookie('sessionToken');
-my $GuestTracker = $input->cookie('guest');
+$SessionToken = $input->cookie('sessionToken');
+$GuestTracker = $input->cookie('guest');
 if($SessionToken eq ""){
 	$GuestTracker='y';
 	$SessionToken=CreateSession($GuestTracker);
@@ -148,7 +148,7 @@ sub CreateSession
 	#end session
 	my $uri = 'http://eds-api.ebscohost.com/edsapi/rest/endsession'; 
 	my $json = '{"sessiontoken":"'.$input->cookie('sessionToken').'"}';
-	if($authtoken == ''){
+	if($authtoken eq ''){
 		$authtoken = CreateAuth();
 	}
 	my $response =  CallREST('POST',$uri,$json, $authtoken, '');
@@ -195,11 +195,24 @@ sub EDSGetConfiguration
 sub EDSSearch
 {	
 	my ($EDSQuery, $GuestStatus) = @_;
-	if($input->param("default")==1){
+	if($input->param("default") eq 1){
 		$EDSQuery=$EDSQuery.EDSDefaultQueryBuilder();
-		#use Data::Dumper;die Dumper $EDSQuery;
+
 	}
 	$GuestTracker = $GuestStatus;
+	if($EDSQuery =~m/\{.*?\}/){
+		my $encodedTerm=$&;
+		$encodedTerm=~s/{//;
+		$encodedTerm=~s/}//;
+		# FIXME: removing special characters for now till an ER is implemented
+		$encodedTerm=~s/\,//;
+		$encodedTerm=~s/\://;
+		$encodedTerm=~s/\(//;
+		$encodedTerm=~s/\)//;
+		
+		$EDSQuery =~s/\{.*?\}/$encodedTerm/;
+	}
+	$EDSQuery =~s/ /\+/g;
 	my $uri = 'http://eds-api.ebscohost.com/edsapi/rest/'.$EDSQuery; 
 	$uri=~s/\|/\&/g;
 	my $response;
@@ -228,7 +241,7 @@ sub EDSProcessItem
 		$Item->{Data} =~s/&lt;/</g;
 		$Item->{Data} =~s/&gt;/>/g;
 		$Item->{Data} =~s/&quot;/"/g; #"
-		$Item->{Data} =~s/<highlight/<span class="term"/;
+		$Item->{Data} =~s/<highlight/<span class="term"/g;
 		$Item->{Data} =~s/<br \/>/, /g;
 		$Item->{Data} =~s/<\/highlight/<\/span/g;
 		if($Item->{Group} eq 'URL'){
