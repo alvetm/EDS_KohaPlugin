@@ -10,8 +10,8 @@ package Koha::Plugin::EDS;
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 04/Dec/2013
-#* LAST CHANGE DESCRIPTION: Plugin is configurable through syspref now.
+#* DATE MODIFIED: 21/Jan/2013
+#* LAST CHANGE DESCRIPTION: Updated to 1.003
 #=============================================================================================
 #*/
 
@@ -28,7 +28,7 @@ my $PluginDir = C4::Context->config("pluginsdir");
 $PluginDir = $PluginDir.'/Koha/Plugin/EDS';
 
 ## Here we set our plugin version
-our $VERSION = 1.002;
+our $VERSION = 1.003;
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {

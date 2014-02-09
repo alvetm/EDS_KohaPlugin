@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 11/11/2013
-#* LAST CHANGE DESCRIPTION: Info Autoupdate checks if authtoken has expired
+#* DATE MODIFIED: 21/01/2014
+#* LAST CHANGE DESCRIPTION: Fix for author search from detailed record, added journal search
 #=============================================================================================
 #*/
 # This file is part of Koha.
@@ -202,13 +202,13 @@ sub EDSSearch
 	$GuestTracker = $GuestStatus;
 	if($EDSQuery =~m/\{.*?\}/){
 		my $encodedTerm=$&;
-		$encodedTerm=~s/{//;
-		$encodedTerm=~s/}//;
-		# FIXME: removing special characters for now till an ER is implemented
-		$encodedTerm=~s/\,//;
-		$encodedTerm=~s/\://;
-		$encodedTerm=~s/\(//;
-		$encodedTerm=~s/\)//;
+
+		$encodedTerm=~s/{//g;
+		$encodedTerm=~s/}//g;
+		$encodedTerm=~s/\,/\\,/g;
+		$encodedTerm=~s/:/\\\:/g;
+		$encodedTerm=~s/\(/\\\(/g;
+		$encodedTerm=~s/\)/\\\)/g;
 		
 		$EDSQuery =~s/\{.*?\}/$encodedTerm/;
 	}
@@ -216,7 +216,6 @@ sub EDSSearch
 	my $uri = 'http://eds-api.ebscohost.com/edsapi/rest/'.$EDSQuery; 
 	$uri=~s/\|/\&/g;
 	my $response;
-
 	$response =  CallREST('GET',$uri,'', GetAuth(), GetSession());
 	if(index($response,'ErrorNumber')!=-1){ # TODO: check for 104 or 109 error and request accordingly
 		$response =  CallREST('GET',$uri,'', CreateAuth(), CreateSession());
@@ -226,6 +225,7 @@ sub EDSSearch
 		my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 		my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 		my $dateString = $mday.'/'.$months[$mon].'/'.(1900+$year);
+		$response=~s/\"Label\"\:\"ISBN\"\}/\"Label\"\:\"ISBN\"\}\,\{\"FieldCode\"\:\"JN\"\,\"Label\"\:\"Journal Title\"\}/; #" Hack to add Journal Title search
 		$dbh->do("UPDATE $table SET plugin_value = ? WHERE plugin_class= ? AND plugin_key= ? ", undef, $response, $PluginClass, 'edsinfo'); 
 		$dbh->do("UPDATE $table SET plugin_value = ? WHERE plugin_class= ? AND plugin_key= ? ", undef, $dateString, $PluginClass, 'lastedsinfoupdate'); 
 		return 'info stored';
@@ -254,8 +254,10 @@ sub EDSProcessItem
 			$Item->{Data}=~s/searchLink fieldCode/a href/g;
 			$Item->{Data}=~s/\" term\=\"/\:/g; #"
 			$Item->{Data}=~s/searchLink\>/a\>/g;		
-			$Item->{Data}=~s/href\=\"/href=\"eds-search.pl\?q=Search\?query\=/g; #"
+			$Item->{Data}=~s/href\=\"/href=\"eds-search.pl\?q=Search\?query\-1\=AND\,/g; #"
 			$Item->{Data}=~s/""/"/; #";
+			$Item->{Data}=~s/\:/\:\{/g;
+			$Item->{Data}=~s/\"\>/\}\"\>/g;#"
 		}
 	return $Item;
 }

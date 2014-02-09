@@ -40,7 +40,7 @@
         <td width="5%" align="center" valign="middle" nowrap scope="col"><div id="latestversion">Loading...</div></td>
       </tr>
       <tr>
-        <td colspan="2" align="center" valign="middle" nowrap scope="col"><input type="button" value="Download Latest Version" onclick="window.open('http://widgets.ebscohost.com/dev/api/koha/index.php')"></td>
+        <td colspan="2" align="center" valign="middle" nowrap scope="col"><input type="button" value="Download Latest Version" onclick="window.open('http://widgets.ebscohost.com/prod/api/koha/index.php')"></td>
   </tr>
 </table>
 <p><hr></p>	
@@ -192,7 +192,7 @@
 		}
 
 	$(document).ready(function(){
-			jQuery.getScript('http://imageserver.ebscohost.com/branding/alvetm/tools/ajaxGet/ajaxGet.js', function(data, textStatus, jqxhr){AJAXGet('http://widgets.ebscohost.com/dev/api/koha/release_notes.php','');});
+			jQuery.getScript('http://imageserver.ebscohost.com/branding/alvetm/tools/ajaxGet/ajaxGet.js', function(data, textStatus, jqxhr){AJAXGet('http://widgets.ebscohost.com/prod/api/koha/release_notes.php','');});
 	});
 	
 function TextToXML(text){

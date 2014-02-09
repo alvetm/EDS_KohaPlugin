@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <kohaplugin>
-	<latestversion>1.002</latestversion>
-	<download>http://widgets.ebscohost.com/dev/api/koha/EDS_Plugin_1.002.kpz</download>
-	<lastupdated>03/Dec/2013</lastupdated>
+	<latestversion>1.003</latestversion>
+	<download>http://widgets.ebscohost.com/prod/api/koha/EDS_Plugin_1.003.kpz</download>
+	<lastupdated>21/Jan/2014</lastupdated>
 	<releasenotes>
+		<release version="1.003">
+			<note id="1" author="amiranda@ebsco.com">Fixed searching for linked authors/sources</note>
+			<note id="2" author="amiranda@ebsco.com">Restored ,:() by escaping them before submitting the search term</note>
+			<note id="3" author="amiranda@ebsco.com">Added JN:Journal Titles to Discovery field code search options</note>
+			<note id="4" author="amiranda@ebsco.com">Facets, limiters, expanders update results when checkbox is clicked</note>
+			<note id="5" author="amiranda@ebsco.com">Fixed save to list 404 error</note>
+			<note id="6" author="amiranda@ebsco.com">Updated widget home from dev to prod</note>
+			<note id="7" author="amiranda@ebsco.com">Cleared EDSScript.js of multiselect list that appeared on discovery to catalogue change</note>
+		</release>
 		<release version="1.002">
 			<note id="1" author="amiranda@ebsco.com">Fixed highlight issues for catalogue records</note>
 			<note id="2" author="amiranda@ebsco.com">Fixed issue when searching with ,:()</note>

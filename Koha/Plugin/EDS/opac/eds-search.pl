@@ -381,7 +381,7 @@ sub EDSProcessLimiters #e.g. AiLC, Cat only etc.
 			#if($Limiter->{DefaultOn} eq 'n')
 			{
 				#warn "no limiters";
-				$Limiter->{Label} = '<input type="checkbox" disabled > '.$Limiter->{Label};		
+				$Limiter->{Label} = '<input type="checkbox" readonly onchange="window.location.href=($(this).parent().attr(\'href\'));$(this).attr(\'disabled\',\'disabled\');"> '.$Limiter->{Label};		
 				$Limiter->{AddAction} =~s/value/y/;
 				$Limiter->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$Limiter->{AddAction};
 
@@ -392,7 +392,7 @@ sub EDSProcessLimiters #e.g. AiLC, Cat only etc.
 						if($EDSRemoveLimiter->{Id} eq $Limiter->{Id}){
 							$Limiter->{AddAction} =~s/y/n/;
 							$Limiter->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$EDSRemoveLimiter->{RemoveAction};
-							$Limiter->{Label} =~s/disabled/disabled checked/;
+							$Limiter->{Label} =~s/readonly/readonly checked/;
 						}
 					}
 				} catch {
@@ -424,7 +424,7 @@ sub EDSProcessExpanders #e.g. thesaurus, fulltext.
 	foreach my $Expander (@EDSExpanders)
 	{
 		#warn "no limiters";
-		$Expander->{Label} = '<input type="checkbox" disabled > '.$Expander->{Label};		
+		$Expander->{Label} = '<input type="checkbox" readonly onchange="window.location.href=($(this).parent().attr(\'href\'));$(this).attr(\'disabled\',\'disabled\');" > '.$Expander->{Label};		
 		#$Expander->{AddAction} =~s/value/y/;
 		$Expander->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$Expander->{AddAction};
 
@@ -435,7 +435,7 @@ sub EDSProcessExpanders #e.g. thesaurus, fulltext.
 					if($EDSRemoveExpander->{Id} eq $Expander->{Id}){
 						#$Expander->{AddAction} =~s/y/n/;
 						$Expander->{AddAction} = 'eds-search.pl?q=Search?'.$EDSSearchQueryWithOutPage.'|action='.$EDSRemoveExpander->{RemoveAction};
-						$Expander->{Label} =~s/disabled/disabled checked/;
+						$Expander->{Label} =~s/readonly/readonly checked/;
 					}
 				}
 			} catch {

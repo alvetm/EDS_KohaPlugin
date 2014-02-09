@@ -14,7 +14,7 @@
 =============================================================================================
 */
 
-//return; // uncomment this to disable EDS
+
 var knownItem='';
 var activeState=0;
 var edsOptions="";
@@ -35,8 +35,6 @@ var kohaSelectInfo = '<h3>Search Koha</h3>Select a known item and enter a search
 $(window).error(function(e){e.preventDefault();}); // keep executing if there is an error.
 
 
-$("#masthead_search").attr("disabled","disabled");
-$("#transl1").attr("disabled","disabled");
 jQuery.getScript('/plugin/Koha/Plugin/EDS/js/jquery.cookie.min.js', function(data, textStatus, jqxhr){
 	$(document).ready(function(){
 		$.getJSON('/plugin/Koha/Plugin/EDS/opac/eds-raw.pl'+'?'+'q=config',function(data){ConfigData(data);});
@@ -124,27 +122,12 @@ function SetKoha(showInfo){
 }
 
 function ShowInfo(msg){
-	//$('#masthead_search').css('z-index',1000);
-	//$('#masthead_search').attr('size',8);
 	var topPos = $('#masthead_search').offset().top;
 	var leftPos = $('#masthead_search').offset().left;
-	//var selectWidth = $('#masthead_search').width()+18;
 	var cartMsg = $("#cartDetails").html();
-	//$('#masthead_search').css('position','absolute');
-	//$('#masthead_search').css('left',topPos+'px');
-	//$('#masthead_search').css('left',leftPos+'px');
 	if(activeState==0){
 		activeState=1;
-		//$('label[for="masthead_search"]').width($('label[for="masthead_search"]').width()+selectWidth);
 	}
-	/*setTimeout(function(){
-		$('#masthead_search').attr('size',0);
-		$('#masthead_search').css('left','');
-		$('#masthead_search').css('top','');
-		$('#masthead_search').css('position','');
-		//$('label[for="masthead_search"]').width($('label[for="masthead_search"]').width()-selectWidth);
-		activeState=0;
-		},3000);*/
 	$("#cartDetails").html(msg);
 	showCart();
 	$("#cartDetails").css('left',leftPos+'px');
@@ -253,7 +236,6 @@ function EDSSetDetailPageNavigator(){
 			});
 	}
 }
-
 
 function QueryString(key) {
    var re=new RegExp('(?:\\?|&)'+key+'=(.*?)(?=&|$)','gi');

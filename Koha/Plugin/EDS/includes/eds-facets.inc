@@ -10,7 +10,7 @@
 				<li>Search Term(s)</li>
 				[% FOR searchQuery IN query %]
 				  <li>
-					<a href="[% searchQuery.RemoveAction %]">[x] [% searchQuery.Query.BooleanOperator %][% IF searchQuery.Query.FieldCode %], [% searchQuery.Query.FieldCode %][% END %] : <span id="searchTerm">[% searchQuery.Query.Term %]</span></a>
+					<a href="[% searchQuery.RemoveAction %]"><input type="checkbox" readonly checked onchange="window.location.href=($(this).parent().attr('href'));$(this).attr('disabled','disabled');" > [% searchQuery.Query.BooleanOperator %][% IF searchQuery.Query.FieldCode %], [% searchQuery.Query.FieldCode %][% END %] : <span id="searchTerm">[% searchQuery.Query.Term %]</span></a>
 				  </li>
 				[% END %]
 				</ul>
@@ -22,7 +22,7 @@
 				<li>Limiters</li>
 				[% FOR facetFilter IN filters %]
 				  <li>
-					<a href="[% facetFilter.FacetValuesWithAction.0.RemoveAction %]">[x] [% facetFilter.FacetValuesWithAction.0.FacetValue.Id %] : [% facetFilter.FacetValuesWithAction.0.FacetValue.Value %]</a>
+					<a href="[% facetFilter.FacetValuesWithAction.0.RemoveAction %]"><input type="checkbox" readonly checked onchange="window.location.href=($(this).parent().attr('href'));$(this).attr('disabled','disabled');" > [% facetFilter.FacetValuesWithAction.0.FacetValue.Id %] : [% facetFilter.FacetValuesWithAction.0.FacetValue.Value %]</a>
 				  </li>
 				[% END %]
 				</ul>

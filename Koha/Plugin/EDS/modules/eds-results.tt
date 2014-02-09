@@ -415,7 +415,7 @@ $(document).ready(function(){
                     [% IF ( opacuserlogin ) %]
                         [% IF ( loggedinusername ) %]
                             [% IF ( virtualshelves ) AND RECORD.Header.DbId.match(cataloguedbid) %]
-                                <a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% ResultRecordId %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% ResultRecordId %]'); return false;">
+                                <a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% ResultRecordId %]" onclick="Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% ResultRecordId %]'); return false;">
                                     Save to Lists
                                 </a>
                             [% END %]
