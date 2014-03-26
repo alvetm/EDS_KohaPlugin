@@ -87,6 +87,9 @@ given($r->{plugin_key}){
 		}
 	}
 }
+
+die "The EDS plugin appears to be unconfigured.\n" unless $authtoken;
+
 {no warnings;local $^W = 0;
 
 my $CookieExpiry = '+'.$cookieexpiry.'m';
