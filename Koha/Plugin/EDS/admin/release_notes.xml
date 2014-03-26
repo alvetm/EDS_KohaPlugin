@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <kohaplugin>
-	<latestversion>1.003</latestversion>
-	<download>http://widgets.ebscohost.com/prod/api/koha/EDS_Plugin_1.003.kpz</download>
-	<lastupdated>21/Jan/2014</lastupdated>
+	<latestversion>1.4</latestversion>
+	<download>http://widgets.ebscohost.com/prod/api/koha/EDS_Plugin_1.4.kpz</download>
+	<lastupdated>10/Feb/2014</lastupdated>
 	<releasenotes>
+		<release version="1.4">
+			<note id="1" author="amiranda@ebsco.com">Seperated detail page sidebar to remove save to list option.</note>
+			<note id="2" author="amiranda@ebsco.com">Added no warnings to all pl's. This is setting was added in configure.tt but not wired to the code yet.</note>
+			<note id="3" author="amiranda@ebsco.com">Removed code that disabled the dropdown menu when JS was loading EDS Info.</note>
+		</release>
 		<release version="1.003">
 			<note id="1" author="amiranda@ebsco.com">Fixed searching for linked authors/sources</note>
 			<note id="2" author="amiranda@ebsco.com">Restored ,:() by escaping them before submitting the search term</note>

@@ -330,13 +330,16 @@ $(document).ready(function(){
   
 			<td>					
 			
-			  [% FOREACH ITEM IN RECORD.Items.nsort %]
+			  [% FOREACH ITEM IN RECORD.Items #removed .nsort %] 
 				[% IF ITEM.Name.match('Title') AND ITEM.Name.length < 6 %]
 				<div style="margin-bottom:5px;">
 					[% IF RECORD.Header.DbId.match(cataloguedbid) %]
-						<!--<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ResultRecordId %]" title="View details for this title">[% ITEM.Data %]</a>-->
-						[% ITEM.CatData %]
-						[% BREAK %]
+						[% IF ITEM.CatData.length<1 %]
+							<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ResultRecordId %]&resultid=[% RECORD.ResultId %]" title="View details for this title">[% ITEM.Data %]</a>
+						[% ELSE %]
+							[% ITEM.CatData %]
+							[% BREAK %]
+						[% END %]
 					[% ELSE %]	
 						<a class="title" href="/plugin/Koha/Plugin/EDS/opac/eds-detail.pl?q=Retrieve?an=[% ResultRecordId %]|dbid=[%RECORD.Header.DbId%]&resultid=[% RECORD.ResultId %]" title="View details for this title">[% ITEM.Data %]</a>
 					[% END %]	
@@ -449,6 +452,17 @@ $(document).ready(function(){
 	
 	</tr>
 [% END %]
+
+
+
+
+
+
+
+
+
+
+
       </table>
     </form>
   </div>

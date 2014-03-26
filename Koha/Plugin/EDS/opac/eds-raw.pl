@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 03/11/2013
-#* LAST CHANGE DESCRIPTION: Added session and guest cookies
+#* DATE MODIFIED: 10/02/2014
+#* LAST CHANGE DESCRIPTION: FIXED: added no warnings
 #=============================================================================================
 #*/
 # This file is part of Koha.
@@ -44,12 +44,13 @@ use Cwd            qw( abs_path );
 use File::Basename qw( dirname );
 use Try::Tiny;
 
-
-
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
 
 require 'eds-methods.pl';
+my $EDSConfig = decode_json(EDSGetConfiguration());
+#{if($EDSConfig->{logerrors} eq 'no'){no warnings;local $^W = 0;}
+{no warnings;local $^W = 0;
 
 my $PluginDir = dirname(abs_path($0));
 $PluginDir =~s /EDS\/opac/EDS/;
@@ -124,3 +125,4 @@ my $GuestMode = $input->cookie(
 $cookie = [$cookie, $SessionToken, $GuestMode];
 
 output_html_with_http_headers $input, $cookie, $template->output;
+}#end no warnings

@@ -80,7 +80,7 @@
                   </div>
                 </div>
                 [% END %] </div>
-              [% END %] [% INCLUDE "$plugin_dir/includes/eds-detail_customlinks.inc" %][% INCLUDE "$instancepath/includes/opac-detail-sidebar.inc" %] [% IF ( NovelistSelectProfile ) %] [% IF ( NovelistSelectView == 'right') %]
+              [% END %] [% INCLUDE "$plugin_dir/includes/eds-detail_customlinks.inc" %][% INCLUDE "$plugin_dir/includes/eds-detail_sidebar.inc" %] [% IF ( NovelistSelectProfile ) %] [% IF ( NovelistSelectView == 'right') %]
               <div id="NovelistSelect">
                 <h4>Novelist Select</h4>
                 <div data-novelist-novelistselect=[% normalized_isbn %]></div>

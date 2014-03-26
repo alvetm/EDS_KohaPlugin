@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 03/11/2013
-#* LAST CHANGE DESCRIPTION: Added guest and session tracker.
+#* DATE MODIFIED: 10/02/2014
+#* LAST CHANGE DESCRIPTION: FIXED: added no warnings
 #=============================================================================================
 #*/
 #
@@ -48,6 +48,9 @@ use File::Basename qw( dirname );
 
 require 'eds-methods.pl';
 
+my $EDSConfig = decode_json(EDSGetConfiguration());
+{no warnings;local $^W = 0;
+
 my $PluginDir = dirname(abs_path($0));
 $PluginDir =~s /EDS\/opac/EDS/;
 
@@ -66,6 +69,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         authnotrequired => 1,
     }
 );
+
 #manage guest mode.
 my $GuestTracker=$cgi->cookie('guest');
 if($GuestTracker eq ''){
@@ -160,3 +164,5 @@ $cookie = [$cookie, $SessionToken, $GuestMode];
 
 my $content_type = ( $format eq 'rss' or $format eq 'atom' ) ? $format : 'html';
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;
+
+}#end no warnings

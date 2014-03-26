@@ -38,7 +38,7 @@ $(window).error(function(e){e.preventDefault();}); // keep executing if there is
 jQuery.getScript('/plugin/Koha/Plugin/EDS/js/jquery.cookie.min.js', function(data, textStatus, jqxhr){
 	$(document).ready(function(){
 		$.getJSON('/plugin/Koha/Plugin/EDS/opac/eds-raw.pl'+'?'+'q=config',function(data){ConfigData(data);});
-		$("#masthead_search").attr("disabled","disabled");
+		//$("#masthead_search").attr("disabled","disabled");
 		if(typeof $('.back_results a').attr('href')!='undefined'){EDSSetDetailPageNavigator();}
 	});
 });
@@ -54,8 +54,8 @@ function ConfigData(data){
 		}else{defaultSearch=$.cookie('defaultSearch');}
 		GoDiscovery();
 	}else{
-		$("#masthead_search").removeAttr("disabled");
-		$("#transl1").removeAttr("disabled");
+		//$("#masthead_search").removeAttr("disabled");
+		//$("#transl1").removeAttr("disabled");
 	}
 }
 
@@ -80,8 +80,8 @@ function GoDiscovery(){
 			}else if(($(this).val()=='') && (defaultSearch!='koha')){SetKoha(1);}// Search Koha
 		})
 	});
-	$("#masthead_search").removeAttr("disabled");
-	$("#transl1").removeAttr("disabled");
+	//$("#masthead_search").removeAttr("disabled");
+	//$("#transl1").removeAttr("disabled");
 }
 
 function SetEDSOptions(data){

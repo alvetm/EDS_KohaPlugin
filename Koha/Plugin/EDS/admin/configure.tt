@@ -154,6 +154,24 @@
           <tr>
             <th colspan="3" align="left" valign="top" nowrap class="settingLabel" scope="row">&nbsp;</th>
           </tr>
+            <tr>
+                <th width="5%" align="left" valign="top" nowrap class="settingLabel" scope="row">Log Errors:</th>
+                <td align="left" valign="top">
+                
+                <select class="textbox" name="logerrors">
+                [% IF logerrors == 'no' %]
+                    <option value="no" selected="selected">No</option>
+                [% ELSE %]
+                    <option value="no">No</option>
+                [% END %]
+                [% IF logerrors == 'yes' %]
+                    <option value="yes" selected="selected">Yes</option>
+                [% ELSE %]
+                    <option value="yes">Yes</option>
+                [% END %]
+                </select></td>
+                <td align="left" valign="top">Select yes to log errors in the error log (best for debugging). Select no to display no errors and warnings.</td>
+            </tr>
           <tr>
             <th align="left" valign="top" nowrap class="settingLabel" scope="row">Auth Token</th>
             <td colspan="2" align="left" valign="top">

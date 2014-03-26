@@ -119,6 +119,11 @@
     <td width="1%" align="left" valign="top" nowrap>&nbsp;</td>
   </tr>
   <tr>
+    <th align="left" valign="top" nowrap scope="row">eds-detail_sidebar.inc</th>
+    <td align="left" valign="middle">&nbsp;</td>
+    <td align="left" valign="top" nowrap>&nbsp;</td>
+  </tr>
+  <tr>
     <th width="1%" align="left" valign="top" nowrap scope="row">eds-resort_form.inc</th>
     <td align="left" valign="middle">&nbsp;</td>
     <td width="1%" align="left" valign="top" nowrap>&nbsp;</td>

@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 1/12/2013
-#* LAST CHANGE DESCRIPTION: FIXED: ailc/limiters dont work if default=y
+#* DATE MODIFIED: 10/02/2014
+#* LAST CHANGE DESCRIPTION: FIXED: added no warnings
 #=============================================================================================
 #*/
 
@@ -60,6 +60,7 @@ use Business::ISBN;
 use Cwd            qw( abs_path );
 use File::Basename qw( dirname );
 
+
 require 'eds-methods.pl';
 
 my $PluginDir = dirname(abs_path($0));
@@ -69,10 +70,15 @@ $PluginDir =~s /EDS\/opac/EDS/;
 #$PluginDir = $PluginDir.'/Koha/Plugin/EDS';
 
 my $cgi = new CGI;
-my $format = $cgi->param("format") || 'html';
+#my $format = $cgi->param("format") || 'html';
 
 my $EDSInfo =  decode_json(EDSGetInfo(0));
 my $EDSConfig = decode_json(EDSGetConfiguration());
+
+#{if($EDSConfig->{logerrors} eq 'no'){no warnings;local $^W = 0;}
+{no warnings;local $^W = 0;
+
+
 my $CookieExpiry = '+'.$EDSConfig->{cookieexpiry}.'m';
 if($EDSConfig->{cookieexpiry} eq ' '){ # dont set expiry
 	$CookieExpiry='';
@@ -185,7 +191,7 @@ if($cgi->param("q")){
 		EDSProcessExpanders();
 		EDSProcessPages();
 		} catch {
-			warn "no results";
+			#warn "no results";
 			$template->param(
 	     searchdesc     => 1,
 	    total  => 0,);
@@ -350,7 +356,7 @@ sub EDSProcessFilters
 			}
 		}
 	} catch {
-			warn "no facet filters";
+			#warn "no facet filters";
 	};
 }
 
@@ -366,7 +372,7 @@ sub EDSProcessQueries
 			}
 		}
 	} catch {
-			warn "no queries";
+			#warn "no queries";
 	};
 }
 
@@ -396,7 +402,7 @@ sub EDSProcessLimiters #e.g. AiLC, Cat only etc.
 						}
 					}
 				} catch {
-					warn 'no limiters';
+					#warn 'no limiters';
 				};
 			}
 		}
@@ -412,7 +418,7 @@ sub EDSProcessLimiters #e.g. AiLC, Cat only etc.
 							}
 						}
 					} catch {
-						warn 'no limiters';
+						#warn 'no limiters';
 					};
 		}
 	}	
@@ -439,7 +445,7 @@ sub EDSProcessExpanders #e.g. thesaurus, fulltext.
 					}
 				}
 			} catch {
-				warn 'no limiters';
+				#warn 'no limiters';
 			};
 	}	
 }
@@ -485,3 +491,5 @@ sub EDSProcessPages
 	$pager{'MinPageNo'}= $pager{'MaxPageNo'}-9;
 	$pager{'MinPageNo'}=($pager{'MinPageNo'}<1)?1:$pager{'MinPageNo'};
 }
+
+}#end no warnings

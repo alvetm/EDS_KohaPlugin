@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 21/01/2014
-#* LAST CHANGE DESCRIPTION: Fix for author search from detailed record, added journal search
+#* DATE MODIFIED: 10/02/2014
+#* LAST CHANGE DESCRIPTION: FIXED: added no warnings
 #=============================================================================================
 #*/
 # This file is part of Koha.
@@ -43,10 +43,12 @@ use HTML::Entities;
 use feature qw(switch);
 use Encode;
 
+
+
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
 
-my ( $edsusername, $edsprofileid, $edspassword, $edscustomerid, $defaultsearch, $cookieexpiry, $cataloguedbid, $catalogueanprefix, $authtoken, $edsinfo, $lastedsinfoupdate, $edsswitchtext, $kohaswitchtext, $edsselecttext, $edsselectinfo, $kohaselectinfo, $instancepath, $themelangforplugin, $defaultEDSQuery, $SessionToken, $GuestTracker)="";
+my ( $edsusername, $edsprofileid, $edspassword, $edscustomerid, $defaultsearch, $cookieexpiry, $cataloguedbid, $catalogueanprefix, $authtoken, $logerrors, $edsinfo, $lastedsinfoupdate, $edsswitchtext, $kohaswitchtext, $edsselecttext, $edsselectinfo, $kohaselectinfo, $instancepath, $themelangforplugin, $defaultEDSQuery, $SessionToken, $GuestTracker)="";
 
 my $PluginClass='Koha::Plugin::EDS';
 my $table='plugin_data';
@@ -65,6 +67,7 @@ given($r->{plugin_key}){
 		when('cookieexpiry') {$cookieexpiry=$r->{plugin_value};}
 		when('cataloguedbid') {$cataloguedbid=$r->{plugin_value};}
 		when('catalogueanprefix') {$catalogueanprefix=$r->{plugin_value};}
+		when('logerrors') {$logerrors=$r->{plugin_value};}
 		when('authtoken') {$authtoken=$r->{plugin_value};}
 		when('edsswitchtext') {$edsswitchtext=$r->{plugin_value};}
 		when('kohaswitchtext') {$kohaswitchtext=$r->{plugin_value};}
@@ -84,7 +87,7 @@ given($r->{plugin_key}){
 		}
 	}
 }
-
+{no warnings;local $^W = 0;
 
 my $CookieExpiry = '+'.$cookieexpiry.'m';
 if($cookieexpiry eq ' '){ # dont set expiry
@@ -188,7 +191,7 @@ sub GetSession
 
 sub EDSGetConfiguration
 {
-	my $JSONConfig = '{"defaultsearch":"'.$defaultsearch.'","cookieexpiry":"'.$cookieexpiry.'","cataloguedbid":"'.$cataloguedbid.'","catalogueanprefix":"'.$catalogueanprefix.'","edsswitchtext":"'.$edsswitchtext.'","kohaswitchtext":"'.$kohaswitchtext.'","edsselecttext":"'.$edsselecttext.'","edsselectinfo":"'.$edsselectinfo.'","themelangforplugin":"'.$themelangforplugin.'","instancepath":"'.$instancepath.'","kohaselectinfo":"'.$kohaselectinfo.'"}';
+	my $JSONConfig = '{"defaultsearch":"'.$defaultsearch.'","logerrors":"'.$logerrors.'","cookieexpiry":"'.$cookieexpiry.'","cataloguedbid":"'.$cataloguedbid.'","catalogueanprefix":"'.$catalogueanprefix.'","edsswitchtext":"'.$edsswitchtext.'","kohaswitchtext":"'.$kohaswitchtext.'","edsselecttext":"'.$edsselecttext.'","edsselectinfo":"'.$edsselectinfo.'","themelangforplugin":"'.$themelangforplugin.'","instancepath":"'.$instancepath.'","kohaselectinfo":"'.$kohaselectinfo.'"}';
 	return $JSONConfig;
 }
 
@@ -318,3 +321,4 @@ sub EDSDefaultQueryBuilder
 	return $defaultEDSQuery;			
 		
 }
+}#end no warnings

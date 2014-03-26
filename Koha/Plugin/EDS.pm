@@ -10,8 +10,8 @@ package Koha::Plugin::EDS;
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 21/Jan/2013
-#* LAST CHANGE DESCRIPTION: Updated to 1.003
+#* DATE MODIFIED: 10/02/2014
+#* LAST CHANGE DESCRIPTION: Updated to 1.4
 #=============================================================================================
 #*/
 
@@ -28,7 +28,7 @@ my $PluginDir = C4::Context->config("pluginsdir");
 $PluginDir = $PluginDir.'/Koha/Plugin/EDS';
 
 ## Here we set our plugin version
-our $VERSION = 1.003;
+our $VERSION = 1.4;
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
@@ -89,6 +89,7 @@ sub configure {
 			catalogueanprefix 	=> $self->retrieve_data('catalogueanprefix'),
 			defaultsearch 		=> $self->retrieve_data('defaultsearch'),
 			cookieexpiry 		=> $self->retrieve_data('cookieexpiry'),
+			logerrors			=> $self->retrieve_data('logerrors'),
 			edsinfo				=> $self->retrieve_data('edsinfo'),
 			lastedsinfoupdate	=> $self->retrieve_data('lastedsinfoupdate'),
 			authtoken			=> $self->retrieve_data('authtoken'),
@@ -119,6 +120,7 @@ sub configure {
 					catalogueanprefix 	=> $cgi->param('catalogueanprefix'),
 					defaultsearch 		=> $cgi->param('defaultsearch'),
 					cookieexpiry 		=> $cgi->param('cookieexpiry'),
+					logerrors			=> $cgi->param('logerrors'),
 					authtoken 			=> $cgi->param('authtoken'),
 					lastedsinfoupdate	=> $cgi->param('lastedsinfoupdate'),
 					last_configured_by => C4::Context->userenv->{'number'},					
@@ -145,6 +147,7 @@ sub configure {
 					cataloguedbid 		=> $cgi->param('cataloguedbid'),
 					catalogueanprefix 	=> $cgi->param('catalogueanprefix'),
 					defaultsearch 		=> $cgi->param('defaultsearch'),
+					logerrors			=> $cgi->param('logerrors'),
 					cookieexpiry 		=> $cgi->param('cookieexpiry'),
 					last_configured_by => C4::Context->userenv->{'number'},
 					edsswitchtext	=> $cgi->param('edsswitchtext'),
