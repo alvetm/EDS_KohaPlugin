@@ -87,6 +87,9 @@ given($r->{plugin_key}){
 		}
 	}
 }
+
+die "The EDS plugin appears to be unconfigured.\n" unless $authtoken;
+
 {no warnings;local $^W = 0;
 
 my $CookieExpiry = '+'.$cookieexpiry.'m';
@@ -218,6 +221,7 @@ sub EDSSearch
 	$EDSQuery =~s/ /\+/g;
 	my $uri = 'http://eds-api.ebscohost.com/edsapi/rest/'.$EDSQuery; 
 	$uri=~s/\|/\&/g;
+	#	use Data::Dumper; die Dumper $uri;
 	my $response;
 	$response =  CallREST('GET',$uri,'', GetAuth(), GetSession());
 	if(index($response,'ErrorNumber')!=-1){ # TODO: check for 104 or 109 error and request accordingly

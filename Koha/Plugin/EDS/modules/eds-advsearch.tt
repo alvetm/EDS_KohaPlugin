@@ -1,0 +1,16 @@
+[% INCLUDE "$instancepath/includes/doc-head-open.inc" %] [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalogue &rsaquo; Advanced search [% INCLUDE "$instancepath/includes/doc-head-close.inc" %]<script type="text/javascript" language="javascript">//<![CDATA[
+            $(document).ready(function() {
+            $('#advsearches > ul').tabs();
+});
+    //]]>
+</script>
+</head>
+<body id="advsearch">
+<div id="doc3" class="yui-t7">
+<div id="bd"> [% INCLUDE "$instancepath/includes/masthead.inc" %]
+  <div id="yui-main">
+    <form action="/cgi-bin/koha/opac-search.pl" method="get">
+    </form>
+  </div>
+</div>
+[% INCLUDE "$instancepath/includes/opac-bottom.inc" %]

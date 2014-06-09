@@ -69,7 +69,8 @@
 									dateAction= dateAction.replace('action=addlimiter(DT1:value)','action=removelimiter(DT1)');
 									window.location.href=dateAction;
 								}else{
-									var regex = /\d{4}-\d[1-12]\/\d{4}-\d[1-12]/;
+									var regex = /^\d{4}-(0[1-9]|1[012])\/\d{4}-(0[1-9]|1[012])$/; 
+									// '/\d{4}-\d[1-12]\/\d{4}-\d[1-12]/; - old'
 									if(regex.test(searchBox.value)){
 										dateAction= dateAction.replace('DT1:value','DT1:'+searchBox.value);
 										window.location.href=dateAction;

@@ -107,7 +107,7 @@ elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) |
     $template_name = $PluginDir.'/modules/eds-results.tmpl';
 }
 else {
-    $template_name = 'opac-advsearch.tmpl';
+    $template_name = $PluginDir.'/modules/eds-advsearch.tmpl';
     $template_type = 'advsearch';
 }
 # load the template

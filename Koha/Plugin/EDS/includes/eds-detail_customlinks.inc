@@ -1,20 +1,31 @@
 <ul id="action">
-[% FOREACH CUSTOMLINK IN DETAILED_RECORD.FullText %]
-	[% IF CUSTOMLINK.value.0.Type %]			  
+[%# FOREACH CUSTOMLINK IN DETAILED_RECORD.FullText %]
+
+	[% IF DETAILED_RECORD.FullText.Text.Availability==1 %]			  
 		<li>
-		[% IF CUSTOMLINK.value.0.Url %]
-			<a target="_blank" class="customLink" href="[% CUSTOMLINK.value.0.Url %]">
+			<a target="_blank" class="html-customlink customLink" href="[% DETAILED_RECORD.PLink %]">
+			HTML Full Text
+		</a></li>
+	[% END %]
+	
+
+	[% IF DETAILED_RECORD.FullText.Links.0.Type %]			  
+		<li>
+		[% IF DETAILED_RECORD.FullText.Links.0.Url %]
+			<a target="_blank" class="[% DETAILED_RECORD.FullText.Links.0.Type %] customLink" href="[% DETAILED_RECORD.FullText.Links.0.Url %]">
 		[% ELSE %]
-			<a class="customLink" href="javascript:alert('Login to gain access to this result.');return false;">
+			<a class="[% DETAILED_RECORD.FullText.Links.0.Type %] customLink" href="javascript:alert('Login to gain access to this result.');$('.FullTextLoader').css('display','none');return false;">
 		[% END %]
-		[% IF CUSTOMLINK.value.0.Type == 'pdflink' %]
+		[% IF DETAILED_RECORD.FullText.Links.0.Type=='pdflink' %]
 			PDF Full Text
-		[% ELSE %]
-			[% CUSTOMLINK.value.0.Type %]
+		[% ELSIF DETAILED_RECORD.FullText.Links.0.Type=='ebook-pdf' %]	
+			eBook Full Text
+		[% ELSE %]	
+			[% DETAILED_RECORD.FullText.Links.0.Type %]
 		[% END %]
 		</a></li>
 	[% END %]
-[% END %]
+[%# END %]
 [% FOREACH CUSTOMLINK IN DETAILED_RECORD.FullText.CustomLinks %]
 	[% IF CUSTOMLINK.Text %]		  
 		<li><a target="_blank" class="customLink" title="[% CUSTOMLINK.MouseOverText %]" href="[% CUSTOMLINK.Url %]">[% CUSTOMLINK.Text %]</a></li>

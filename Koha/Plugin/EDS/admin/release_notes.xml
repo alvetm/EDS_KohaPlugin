@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <kohaplugin>
-	<latestversion>1.4</latestversion>
-	<download>http://widgets.ebscohost.com/prod/api/koha/EDS_Plugin_1.4.kpz</download>
-	<lastupdated>10/Feb/2014</lastupdated>
+	<latestversion>1.5</latestversion>
+	<download>http://widgets.ebscohost.com/prod/api/koha/EDS_Plugin_1.5.kpz</download>
+	<lastupdated>09/Jun/2014</lastupdated>
 	<releasenotes>
+		<release version="1.5">
+			<note id="1" author="amiranda@ebsco.com">Caching raw call for knownitems and config</note>
+			<note id="2" author="amiranda@ebsco.com">Merged EDSBbasket.js into EDSScript.js - Kept empty EDSBasket.js for copy over version in 1.4 and avoid errors</note>
+			<note id="3" author="amiranda@ebsco.com">Added json3 and jStorage into jQuery.cookie.min.js</note>
+			<note id="4" author="amiranda@ebsco.com">Updated eds-detail_customlinks.inc to display icons for html,ebook and pdf fulltext. Added css styles to pubtype-icons.css</note>
+			<note id="5" author="amiranda@ebsco.com">Added eds-advsearch.tt. Placeholder file for now. Updated eds-search.pl to point to adv search if there are no parameters</note>			
+			<note id="6" author="amiranda@ebsco.com">updated eds-results.tt to display ebook, pdf and html icons. Also added formats-sm-sprite.png to images folder </note>			
+			<note id="7" author="amiranda@ebsco.com">Fixed pub date issues and replaced regex with /^\d{4}-(0[1-9]|1[012])\/\d{4}-(0[1-9]|1[012])$/ instead of /\d{4}-\d[1-12]\/\d{4}-\d[1-12]/</note>			
+			<note id="8" author="amiranda@ebsco.com">Set cookig bib_list under /cgi-bin to match bib_list under /plugin to fix cart feature</note>		
+			<note id="9" author="amiranda@ebsco.com">remove discovery items from bib_list before submitting to send function in basketto prevent perl error. </note>		
+			<note id="10" author="amiranda@ebsco.com">added code to display discovery items in more details feature of the basket</note>		
+			<note id="11" author="amiranda@ebsco.com">updated the checkboxes in eds-results.tt to contain ids so cart feature can work</note>		
+			<note id="12" author="amiranda@ebsco.com">Added id's to add/remove cart items from detailed record</note>
+			<note id="13" author="robin@kallisti.net.nz">Check for authtoken and die gracefully if plugin setup is not complete </note>
+			<note id="14" author="amiranda@ebsco.com">Deleted opac-basket.tt. Updated admin/setuptool.tt by removing the part about copy paste opac-basket.tt into core.</note>
+		</release>
 		<release version="1.4">
 			<note id="1" author="amiranda@ebsco.com">Seperated detail page sidebar to remove save to list option.</note>
 			<note id="2" author="amiranda@ebsco.com">Added no warnings to all pl's. This is setting was added in configure.tt but not wired to the code yet.</note>

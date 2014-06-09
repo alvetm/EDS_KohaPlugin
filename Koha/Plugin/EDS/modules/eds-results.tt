@@ -307,17 +307,17 @@ $(document).ready(function(){
 	  <td class="select selectcol">
 		[% IF RECORD.Items %] [% #Check if items exist (guest mode) %]
 			[% IF ( opacbookbag ) #AND RECORD.Header.DbId.match(cataloguedbid) %]
-					<input type="checkbox" id="bib[% ResultRecordId %]" name="biblionumber" value="[% ResultRecordId %]" /> 
+					<input type="checkbox" id="bib[% ResultRecordId %]" name="biblionumber" value="[% ResultRecordId %]|[% RECORD.Header.DbId %]" /> 
 					<label for="bib[% ResultRecordId %]"></label>
 				[% ELSE %] 
 					[% IF ( virtualshelves ) #AND RECORD.Header.DbId.match(cataloguedbid) %]
-						<input type="checkbox" id="bib[% ResultRecordId %]" name="biblionumber" value="[% ResultRecordId %]" /> 
+						<input type="checkbox" id="bib[% ResultRecordId %]" name="biblionumber" value="[% ResultRecordId %]|[% RECORD.Header.DbId %]" /> 
 						<label for="bib[% ResultRecordId %]"></label>
 					[% ELSE %] 
 					[% IF ( RequestOnOpac ) %]
 						[% UNLESS ( RECORD.norequests ) #TODO: currently returns yes by default %]
 							[% IF ( opacuserlogin ) #AND RECORD.Header.DbId.match(cataloguedbid) %]
-								<input type="checkbox" id="bib[% ResultRecordId %]" name="biblionumber" value="[% ResultRecordId %]" /> 
+								<input type="checkbox" id="bib[% ResultRecordId %]" name="biblionumber" value="[% ResultRecordId %]|[% RECORD.Header.DbId %]" /> 
 								<label for="bib[% ResultRecordId %]"></label>
 							[% END %]
 						[% END %]
@@ -365,17 +365,25 @@ $(document).ready(function(){
 			  [% END %]	
 			  
 			  [% #CustomLinks %]
-			  [% IF RECORD.CustomLinks OR RECORD.FullText.Links OR RECORD.FullText.CustomLinks %]
+			  [% IF RECORD.CustomLinks OR RECORD.FullText.Links OR RECORD.FullText.CustomLinks OR RECORD.FullText.Text.Availability==1 %]
 				  <div class="results_summary actions">
 						<span class="label">Links: </span>
+					  [% FOREACH CUSTOMLINK IN RECORD.FullText.Text.Availability %]
+							
+								<a class="html-customlink" target="_blank" href="eds-detail.pl?q=Retrieve?an=[% ResultRecordId %]|dbid=[%RECORD.Header.DbId%]&fulltext=html" title="[% CUSTOMLINK.MouseOverText %]">
+									HTML Full Text
+								</a>
+					  [% END %]	
 					  [% FOREACH CUSTOMLINK IN RECORD.FullText.Links %]
 							
-								<a class="hold" target="_blank" href="eds-detail.pl?q=Retrieve?an=[% ResultRecordId %]|dbid=[%RECORD.Header.DbId%]&fulltext=1" title="[% CUSTOMLINK.MouseOverText %]">
-									[% IF CUSTOMLINK.Type == 'pdflink' %]PDF Full Text[% ELSE %][% CUSTOMLINK.Type %][% END %]
+								<a class="[% CUSTOMLINK.Type %]" target="_blank" href="eds-detail.pl?q=Retrieve?an=[% ResultRecordId %]|dbid=[%RECORD.Header.DbId%]&fulltext=[% CUSTOMLINK.Type %]" title="[% CUSTOMLINK.MouseOverText %]">
+									[% IF CUSTOMLINK.Type == 'pdflink' %]PDF Full Text
+									[% ELSIF CUSTOMLINK.Type == 'ebook-pdf' %]eBook Full Text
+									[% ELSE %][% CUSTOMLINK.Type %][% END %]
 								</a>
 							
 
-					  [% END %]						
+					  [% END %]										
 					  [% FOREACH CUSTOMLINK IN RECORD.FullText.CustomLinks %]
 							
 								<a class="hold" target="_blank" href="[% CUSTOMLINK.Url %]" title="[% CUSTOMLINK.MouseOverText %]">

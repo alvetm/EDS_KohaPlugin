@@ -93,14 +93,6 @@
     <td width="1%" align="left" valign="top" nowrap>&nbsp;</td>
   </tr>
   <tr>
-    <th width="1%" align="left" valign="top" nowrap scope="row">opac-basket.tt</th>
-    <td align="left" valign="top" nowrap><p><strong>COPY</strong> this file and replace opac-basket.tt in \opac\htdocs\opac-tmpl\&lt;themelang&gt;\modules. This file adds the below line just before the head tag.</p>
-    <p>
-      <textarea name="textarea" cols="45" rows="3" readonly id="textarea" style="width:99%">[ % IF ( EDSEnabled ) % ]<script type="text/javascript" language="javascript" src="/plugin/Koha/Plugin/EDS/js/EDSBasket.js"></script>[ % END % ] </textarea>
-    </p></td>
-    <td width="1%" align="left" valign="top" nowrap>&nbsp;</td>
-  </tr>
-  <tr>
     <th colspan="3" align="left" valign="top" nowrap scope="row">Folder [includes]: Includes - <strong>Minimum file permissions:</strong> Read (Everyone), Write(Owner), Execute(None) or 644</th>
   </tr>
   <tr>
