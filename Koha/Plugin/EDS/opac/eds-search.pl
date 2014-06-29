@@ -10,8 +10,8 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 10/02/2014
-#* LAST CHANGE DESCRIPTION: FIXED: added no warnings
+#* DATE MODIFIED: 28/06/2014
+#* LAST CHANGE DESCRIPTION: Added Advanced Search
 #=============================================================================================
 #*/
 
@@ -93,6 +93,8 @@ my $lang = C4::Templates::getlanguage($cgi, 'opac');
 my $template_name;
 my $template_type = 'basic';
 my @params = $cgi->param("limit");
+my $search_desc = 1;
+my $adv_search = 0;
 
 
 my $format = $cgi->param("format") || '';
@@ -109,6 +111,8 @@ elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) |
 else {
     $template_name = $PluginDir.'/modules/eds-advsearch.tmpl';
     $template_type = 'advsearch';
+	$search_desc = 0;
+	$adv_search = 1;
 }
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
@@ -195,9 +199,10 @@ if($cgi->param("q")){
 			$template->param(
 	     searchdesc     => 1,
 	    total  => 0,);
-	#	use Data::Dumper; die Dumper $EDSResponse;
+		
 	};
 }
+#use Data::Dumper; die Dumper $EDSResponse;
 # Pager template params
 	$template->param(
 	     PAGE_NUMBERS     => \%pager,
@@ -209,11 +214,14 @@ if($cgi->param("q")){
 		current_view	=> GetSearchParam('view'),
 	    sortable_indexes => $EDSInfo->{AvailableSearchCriteria}->{AvailableSorts},
 		search_modes	=> $EDSInfo->{AvailableSearchCriteria}->{AvailableSearchModes},
+		search_fields	=> $EDSInfo->{AvailableSearchCriteria}->{AvailableSearchFields},
 		facets_loop      => \@EDSFacets,
 	    filters          => \@EDSFacetFilters,
 		limiters		 => \@EDSLimiters,
+		advlimiters		=> $EDSInfo->{AvailableSearchCriteria}->{AvailableLimiters},
 		search_string	 => $EDSSearchQueryWithOutPage,
-		searchdesc		=> 1,
+		searchdesc		=> $search_desc,
+		advsearch		=> $adv_search,
 		cookieexpiry	=> $CookieExpiry,
 		cataloguedbid	=> $EDSConfig->{cataloguedbid},
 		catalogueanprefix=> $EDSConfig->{catalogueanprefix},

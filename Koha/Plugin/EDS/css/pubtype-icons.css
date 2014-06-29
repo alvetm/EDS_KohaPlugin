@@ -40,19 +40,56 @@
 
 .pdflink{
 	background-image:url('../images/formats-sm-sprite.png');
-	background-position-y:-750px;
+	background-position:0px -750px;
 	padding:2px 2px 2px 23px;
 	background-repeat:no-repeat;
 }
 .ebook-pdf{
 	background-image:url('../images/formats-sm-sprite.png');
-	background-position-y:-246px;
+	background-position:0px -246px;
 	padding:2px 2px 2px 23px;
 	background-repeat:no-repeat;
 }
 .html-customlink{
 	background-image:url('../images/formats-sm-sprite.png');
-	background-position-y:-600px;
+	background-position:0px -600px;
 	padding:2px 2px 2px 23px;
 	background-repeat:no-repeat;
+}
+
+
+
+
+
+
+.advInput {
+	width: 238px;
+}
+.advFieldCode {
+	width: 170px;
+}
+}
+.advBool {
+	width: 70px;
+	padding: 10px;
+}
+#searchBlock li, #modeExpanders li{
+	list-style:none;
+}
+.addRemoveLinks a{
+	text-decoration:none;
+}
+#edsAdvSearch{
+
+	margin:40px;
+}
+#limiterItem{
+	width:50%;
+	float:left;
+	padding:0 0 10px 0;
+	list-style:none;
+}
+.advItemLabel{
+	font-weight:bold;
+	padding:0 0 10px 0;
 }

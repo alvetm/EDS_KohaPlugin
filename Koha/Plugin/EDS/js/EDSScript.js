@@ -187,6 +187,8 @@ function SetEDS(showInfo){
 			defaultSearch="eds";
 			$('#transl1').val($.cookie('QueryTerm'));
 			$('#transl1').removeClass('placeholder');
+			$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('href','/plugin/Koha/Plugin/EDS/opac/eds-search.pl');
+			
 }
 
 function SetKoha(showInfo){
@@ -199,6 +201,7 @@ function SetKoha(showInfo){
 			$.removeCookie('defaultSearch', { path: '/' });
 			$.cookie('defaultSearch','koha')
 			defaultSearch="koha";
+			$('a[href="/plugin/Koha/Plugin/EDS/opac/eds-search.pl"]').attr('href','/cgi-bin/koha/opac-search.pl');
 }
 
 function ShowInfo(msg){
@@ -457,3 +460,20 @@ function EDSSendBasket() {
 //BASKET END----
 
 
+//ADVANCED SEARCH START
+var searchBlockCount=3;
+function AddSearchBlock(blockNo){
+	var newBlock = $('#searchFields_'+blockNo).html();
+	newBlock = newBlock.replace("("+blockNo+")","("+(blockNo+1)+")");
+	newBlock = newBlock.replace("("+blockNo+")","("+(blockNo+1)+")");
+	newBlock = newBlock.replace('style="display:none;"',"");
+	$('#searchFields_'+blockNo+' .addRemoveLinks').css('display','none');
+	$("#searchBlock").append('<li id="searchFields_'+(blockNo+1)+'">'+newBlock+'</li>');
+	searchBlockCount++;
+}
+function RemoveSearchBlock(blockNo){
+	$('#searchFields_'+blockNo).remove();
+		searchBlockCount--;
+	$('#searchFields_'+searchBlockCount+' .addRemoveLinks').css('display','inline');
+}
+//ADVANCED SEARCH END 

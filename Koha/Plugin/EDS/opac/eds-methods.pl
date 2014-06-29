@@ -10,8 +10,10 @@
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 10/02/2014
-#* LAST CHANGE DESCRIPTION: FIXED: added no warnings
+#* DATE MODIFIED: 30/06/2014
+#* LAST CHANGE DESCRIPTION: FIXED: Added IP authentication
+#*							reset authtoken and session token when clicking update info
+#*							set guest=n if IP
 #=============================================================================================
 #*/
 # This file is part of Koha.
@@ -88,7 +90,7 @@ given($r->{plugin_key}){
 	}
 }
 
-die "The EDS plugin appears to be unconfigured.\n" unless $authtoken;
+die "The EDS plugin appears to be unconfigured.\n" unless $edsprofileid;
 
 {no warnings;local $^W = 0;
 
@@ -137,6 +139,13 @@ sub CreateAuth
 	#ask for AuthToken from EDSAPI
 	my $uri = 'https://eds-api.ebscohost.com/authservice/rest/uidauth';
 	my $json = '{"UserId":"'.$edsusername.'","Password":"'.$edspassword.'","InterfaceId":"KohaEDS"}';
+	
+	if($edsusername eq "-"){
+		$uri = 'https://eds-api.ebscohost.com/authservice/rest/ipauth';
+		$json = '{"InterfaceId":"KohaEDS"}';
+	}
+	
+	
 	my $response =  CallREST('POST',$uri,$json, '', '');
 	$authtoken = decode_json( $response );
 	$authtoken = $authtoken->{AuthToken};
@@ -158,6 +167,10 @@ sub CreateSession
 		$authtoken = CreateAuth();
 	}
 	my $response =  CallREST('POST',$uri,$json, $authtoken, '');
+	
+	if($edsusername eq "-"){#Guest= no automatically if IP
+		$GuestTracker='n';
+	}
 
 	#ask for SessionToken from EDSAPI
 	$uri = 'http://eds-api.ebscohost.com/edsapi/rest/createsession'; 
@@ -223,7 +236,11 @@ sub EDSSearch
 	$uri=~s/\|/\&/g;
 	#	use Data::Dumper; die Dumper $uri;
 	my $response;
-	$response =  CallREST('GET',$uri,'', GetAuth(), GetSession());
+	if($EDSQuery eq "info"){
+		$response =  CallREST('GET',$uri,'', CreateAuth(), CreateSession());
+	}else{
+		$response =  CallREST('GET',$uri,'', GetAuth(), GetSession());
+	}
 	if(index($response,'ErrorNumber')!=-1){ # TODO: check for 104 or 109 error and request accordingly
 		$response =  CallREST('GET',$uri,'', CreateAuth(), CreateSession());
 	}	

@@ -10,8 +10,11 @@ package Koha::Plugin::EDS;
 #* URL: N/A
 #* AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 #* DATE ADDED: 31/10/2013
-#* DATE MODIFIED: 10/02/2014
-#* LAST CHANGE DESCRIPTION: Updated to 1.5
+#* DATE MODIFIED: 30/06/2014
+#* LAST CHANGE DESCRIPTION: Updated to 1.6
+#* 							removed redundant ifelse for store_data
+#*							setting params to - if empty.
+#*							uid/password not mandatory if using IP authentication
 #=============================================================================================
 #*/
 
@@ -28,18 +31,18 @@ my $PluginDir = C4::Context->config("pluginsdir");
 $PluginDir = $PluginDir.'/Koha/Plugin/EDS';
 
 ## Here we set our plugin version
-our $VERSION = 1.5;
+our $VERSION = 1.6;
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
     name   => 'Koha EDS API Integration',
     author => 'Alvet Miranda - amiranda@ebsco.com',
     description =>
-'This plugin integrates EBSCO Discovery Service(EDS) in Koha.<p>Go to Configure(right) to configure the API Plugin first then Run tool (left) for setup instructions.</p><p>For assistance; email EBSCO support at <a href="mailto:support@ebscohost.com">support@ebscohost.com</a> or call the toll free international hotline at +800-3272-6000</p>',
+'This plugin integrates EBSCO Discovery Service(EDS) in Koha.<p>Go to Configure(right) to configure the API Plugin first then Run tool (left) for setup instructions.</p><p>For assistance; email EBSCO support at <a href="mailto:support@ebscohost.com">support@ebsco.com</a> or call the toll free international hotline at +800-3272-6000</p>',
     date_authored   => '2013-10-27',
-    date_updated    => '2015-06-09',
+    date_updated    => '2015-06-30',
     minimum_version => '3.1202000',
-    maximum_version => undef,
+    maximum_version => '3.1202000',
     version         => $VERSION,
 };
 
@@ -109,57 +112,41 @@ sub configure {
         print $template->output();
     }
     else {
-		if($cgi->param('edsinfo') eq 'Update Required'){
-			$self->store_data(
+		
+		$self->store_data(
 				{
-					edsusername 		=> $cgi->param('edsusername'),
-					edspassword 		=> $cgi->param('edspassword'),
-					edsprofileid 		=> $cgi->param('edsprofileid'),
-					edscustomerid 		=> $cgi->param('edscustomerid'),
-					cataloguedbid 		=> $cgi->param('cataloguedbid'),
-					catalogueanprefix 	=> $cgi->param('catalogueanprefix'),
-					defaultsearch 		=> $cgi->param('defaultsearch'),
-					cookieexpiry 		=> $cgi->param('cookieexpiry'),
-					logerrors			=> $cgi->param('logerrors'),
-					authtoken 			=> $cgi->param('authtoken'),
-					lastedsinfoupdate	=> $cgi->param('lastedsinfoupdate'),
-					last_configured_by => C4::Context->userenv->{'number'},					
-					edsswitchtext	=> $cgi->param('edsswitchtext'),
-					kohaswitchtext	=> $cgi->param('kohaswitchtext'),
-					edsselecttext	=> $cgi->param('edsselecttext'),
-					edsselectinfo	=> $cgi->param('edsselectinfo'),
-					kohaselectinfo	=> $cgi->param('kohaselectinfo'),
-					edsinfo 		=> $cgi->param('edsinfo'),
-					instancepath	=> $cgi->param('instancepath'),
-					themelangforplugin	=> $cgi->param('themelangforplugin'),
-					
-					
-					
-				}
-			);
-		}else{ # TODO: remove duplicate params
-			$self->store_data(
-				{
-					edsusername 		=> $cgi->param('edsusername'),
-					edspassword 		=> $cgi->param('edspassword'),
-					edsprofileid 		=> $cgi->param('edsprofileid'),
-					edscustomerid 		=> $cgi->param('edscustomerid'),
-					cataloguedbid 		=> $cgi->param('cataloguedbid'),
-					catalogueanprefix 	=> $cgi->param('catalogueanprefix'),
-					defaultsearch 		=> $cgi->param('defaultsearch'),
-					logerrors			=> $cgi->param('logerrors'),
-					cookieexpiry 		=> $cgi->param('cookieexpiry'),
+					edsusername 		=> ($cgi->param('edsusername')?$cgi->param('edsusername'):"-"),
+					edspassword 		=> ($cgi->param('edspassword')?$cgi->param('edspassword'):"-"),
+					edsprofileid 		=> ($cgi->param('edsprofileid')?$cgi->param('edsprofileid'):"-"),
+					edscustomerid 		=> ($cgi->param('edscustomerid')?$cgi->param('edscustomerid'):"-"),
+					cataloguedbid 		=> ($cgi->param('cataloguedbid')?$cgi->param('cataloguedbid'):"-"),
+					catalogueanprefix 	=> ($cgi->param('catalogueanprefix')?$cgi->param('catalogueanprefix'):"-"), 
+					defaultsearch 		=> ($cgi->param('defaultsearch')?$cgi->param('defaultsearch'):"-"),
+					logerrors			=> ($cgi->param('logerrors')?$cgi->param('logerrors'):"-"),
+					cookieexpiry 		=> ($cgi->param('cookieexpiry')?$cgi->param('cookieexpiry'):"-"),
 					last_configured_by => C4::Context->userenv->{'number'},
-					edsswitchtext	=> $cgi->param('edsswitchtext'),
-					kohaswitchtext	=> $cgi->param('kohaswitchtext'),
-					edsselecttext	=> $cgi->param('edsselecttext'),
-					edsselectinfo	=> $cgi->param('edsselectinfo'),
-					kohaselectinfo	=> $cgi->param('kohaselectinfo'),
-					instancepath	=> $cgi->param('instancepath'),
-					themelangforplugin	=> $cgi->param('themelangforplugin'),
+					edsswitchtext	=> ($cgi->param('edsswitchtext')?$cgi->param('edsswitchtext'):"-"),
+					kohaswitchtext	=> ($cgi->param('kohaswitchtext')?$cgi->param('kohaswitchtext'):"-"),
+					edsselecttext	=> ($cgi->param('edsselecttext')?$cgi->param('edsselecttext'):"-"),
+					edsselectinfo	=> ($cgi->param('edsselectinfo')?$cgi->param('edsselectinfo'):"-"),
+					kohaselectinfo	=> ($cgi->param('kohaselectinfo')?$cgi->param('kohaselectinfo'):"-"),
+					instancepath	=> ($cgi->param('instancepath')?$cgi->param('instancepath'):"-"),
+					themelangforplugin	=> ($cgi->param('themelangforplugin')?$cgi->param('themelangforplugin'):"-"),
 				}
 			);
-		}
+		
+			if($cgi->param('edsinfo') eq 'Update Required'){ 
+				
+				$self->store_data(
+					{
+						authtoken 			=> $cgi->param('authtoken'), 
+						lastedsinfoupdate	=> $cgi->param('lastedsinfoupdate'),
+						edsinfo 			=> $cgi->param('edsinfo'),
+						$self->store_data
+					}
+				);	
+
+			}
         $self->go_home();
     }
 }
