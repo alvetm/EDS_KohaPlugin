@@ -8,8 +8,8 @@
 * URL: N/A
 * AUTHOR & EMAIL: Alvet Miranda - amiranda@ebsco.com
 * DATE ADDED: 31/10/2013
-* DATE MODIFIED: 8/06/2014
-* LAST CHANGE DESCRIPTION: Cache config and known item queries.
+* DATE MODIFIED: 15/07/2014
+* LAST CHANGE DESCRIPTION: Added advanced search and logic for year/month seperation.
 =============================================================================================
 */
 
@@ -41,6 +41,9 @@ var bibListLocal = "";
 $(window).error(function(e){e.preventDefault();}); // keep executing if there is an error.
 
 $(document).ready(function(){
+	
+	//$('body').prepend('<center><h1>This is Koha version 3.12</h1></center>');
+	
 	jQuery.getScript('/plugin/Koha/Plugin/EDS/js/jquery.cookie.min.js?v2', function(data, textStatus, jqxhr){
 		
 		
@@ -187,7 +190,15 @@ function SetEDS(showInfo){
 			defaultSearch="eds";
 			$('#transl1').val($.cookie('QueryTerm'));
 			$('#transl1').removeClass('placeholder');
-			$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('href','/plugin/Koha/Plugin/EDS/opac/eds-search.pl');
+			//advSearch
+			if(document.URL.indexOf("/plugin/Koha/Plugin/EDS/opac/eds-search.pl")!=-1 && QueryString('q')==""){
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('title',kohaSwitchText);
+			}else if(document.URL.indexOf("/cgi-bin/koha/opac-search.pl")!=-1  && QueryString('q')==""){
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('title',edsSwitchText);
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('href','/plugin/Koha/Plugin/EDS/opac/eds-search.pl');
+			}else{
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('href','/plugin/Koha/Plugin/EDS/opac/eds-search.pl');
+			}
 			
 }
 
@@ -201,7 +212,15 @@ function SetKoha(showInfo){
 			$.removeCookie('defaultSearch', { path: '/' });
 			$.cookie('defaultSearch','koha')
 			defaultSearch="koha";
-			$('a[href="/plugin/Koha/Plugin/EDS/opac/eds-search.pl"]').attr('href','/cgi-bin/koha/opac-search.pl');
+			//advSearch
+			if(document.URL.indexOf("/plugin/Koha/Plugin/EDS/opac/eds-search.pl")!=-1 && QueryString('q')==""){
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('title',kohaSwitchText);
+			}else if(document.URL.indexOf("/cgi-bin/koha/opac-search.pl")!=-1  && QueryString('q')==""){
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('title',edsSwitchText);
+				$('a[href="/cgi-bin/koha/opac-search.pl"]').attr('href','/plugin/Koha/Plugin/EDS/opac/eds-search.pl');
+			}else{
+				$('a[href="/plugin/Koha/Plugin/EDS/opac/eds-search.pl"]').attr('href','/cgi-bin/koha/opac-search.pl');
+			}			
 }
 
 function ShowInfo(msg){
@@ -476,4 +495,59 @@ function RemoveSearchBlock(blockNo){
 		searchBlockCount--;
 	$('#searchFields_'+searchBlockCount+' .addRemoveLinks').css('display','inline');
 }
+
+
+function AdvSearchEDS(){
+	var advQuery="";
+	for(sbCount=1;sbCount<=searchBlockCount;sbCount++){
+		var advBool=$("#searchFields_"+sbCount+" .advBool").val(); if(advBool==undefined){advBool="AND";}
+		var advKi=$("#searchFields_"+sbCount+" .advFieldCode").val();
+		var advTerm=$("#searchFields_"+sbCount+" .advInput").val(); if(advTerm==undefined){advTerm="";}
+	
+		if(advTerm.length>1)
+			advQuery+="query-"+sbCount+"="+advBool+","+advKi+":{"+advTerm+"}|";
+	}
+	
+	$("input:not(.advSB)").each(function(index,value){
+
+		if(jQuery(this).attr("type")=="checkbox" || jQuery(this).attr("type")=="radio"){
+			if(jQuery(this).is(":checked")){
+				jQuery(this).val(jQuery(this).val().replace(":value",":y"));
+				advQuery+="action="+jQuery(this).val()+"|";
+			}
+		}else if(jQuery(this).attr("type")=="text"){
+			if(jQuery(this).val().length>1){
+				jQuery(this).attr("data-action",jQuery(this).attr("data-action").replace(":value",":"+jQuery(this).val()));
+				advQuery+="action="+jQuery(this).attr("data-action")+"|";
+			}
+		}
+	});
+	
+	$("select:not(.advSB) option:selected").each(function(index,value){
+			advQuery+="action="+$(this).val()+"|";
+	});
+	
+	//dateRange
+	var fromMonth=($("#common_DT1").val()=="")?"01":$("#common_DT1").val();
+	var toMonth=($("#common_DT1_ToMonth").val()=="")?"12":$("#common_DT1_ToMonth").val();
+	var fromYear=$("#common_DT1_FromYear").val();
+	var toYear=$("#common_DT1_ToYear").val();
+	if (fromYear!="YYYY" && toYear!="YYYY"){
+		if(isNaN(fromYear) || isNaN(toYear)){
+			alert("Please enter a valid year in YYYY format");
+			$("#common_DT1_FromYear").focus();
+			return;
+		}else{
+			advQuery+="action="+jQuery("#common_DT1_FromYear").attr("data-action").replace(":value",":"+fromYear+"-"+fromMonth+"/"+toYear+"-"+toMonth);
+		}
+	}
+	
+	//alert(advQuery);	
+	window.location.href="eds-search.pl?q=Search?"+advQuery;
+
+	
+	
+}
+
+
 //ADVANCED SEARCH END 

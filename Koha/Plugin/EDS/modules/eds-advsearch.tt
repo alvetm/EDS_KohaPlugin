@@ -63,38 +63,53 @@
 			<div align="right"><input type="reset" class="advSB" /></div>
 			<fieldset>
 			  <legend>Search Modes and Expanders</legend>
-			  
-			  <ul id="modeExpanders">
-			  	<li id="limiterItem">
-					<ul>
-						[% FOREACH mode IN search_modes %]
-						<li>	
-							[% IF mode.DefaultOn == 'y' %]
-								<input name="searchMode" checked="checked" id="[% mode.Mode %]" type="radio" value="[% mode.AddAction %]">
-							[% ELSE %]
-								<input name="searchMode" id="[% mode.Mode %]" type="radio" value="[% mode.AddAction %]">
-							[% END %]
-							<label for="[% mode.Mode %]" >[% mode.Label %]</label>
-						</li>
-						[% END %]	
-					</ul>
-				</li>
-				
-				[% FOREACH expander IN expanders %]
-				<li id="limiterItem">	
-					<label for="[% expander.Id %]" class="advItemLabel" >[% expander.Label %]</label>
-					<section>
-					[% IF expander.DefaultOn == 'y' %]
-						<input name="[% expander.Id %]" checked="checked" id="[% expander.Id %]" type="checkbox" value="[% expander.AddAction %]">
-					[% ELSE %]
-						<input name="[% expander.Id %]" id="[% expander.Id %]" type="checkbox" value="[% expander.AddAction %]">
-					[% END %]
-					</section>
-				</li>
-				[% END %]	
-				
-			  </ul>
-			  
+			 <dl>
+				<dt class="search-option-label"> 
+						<strong>Search modes</strong>
+					<a class="helplink" target="_blank" href="http://support.ebsco.com/help/?int=eds&lang=en&feature_id=SrcMode&TOC_ID=Always&SI=0&BU=0&GU=1&PS=0&ver=live&dbs=">
+						<img valign="middle" src="../images/iconQuestionMarkGeneric.png" width="21" alt="Help (opens in new window)">
+					</a>
+				</dt> 
+				<dd>
+				  <ul id="modeExpanders">
+					<li id="limiterItem">
+						<ul>
+							[% FOREACH mode IN search_modes %]
+							<li>	
+								[% IF mode.DefaultOn == 'y' %]
+									<input name="searchMode" checked="checked" id="[% mode.Mode %]" type="radio" value="[% mode.AddAction %]">
+								[% ELSE %]
+									<input name="searchMode" id="[% mode.Mode %]" type="radio" value="[% mode.AddAction %]">
+								[% END %]
+								[% IF mode.Mode == 'smart' %]
+									<label for="[% mode.Mode %]" >[% mode.Label %]
+									 <a href="http://support.ebsco.com/help/?int=eds&lang=en&feature_id=SrcMode&TOC_ID=Always&SI=0&BU=0&GU=1&PS=0&ver=live&dbs=" target="_blank" title="Enter as much text for your search as you want - a phrase, a sentence, paragraph, or even whole pages. This mode searches EBSCO Databases only.">Hint</a>
+									 
+									</label>
+								[% ELSE %]
+									<label for="[% mode.Mode %]" >[% mode.Label %]</label>
+								[% END %]
+							</li>
+							[% END %]	
+						</ul>
+					</li>
+					
+					[% FOREACH expander IN expanders %]
+					<li id="limiterItem">	
+						<label for="[% expander.Id %]" class="advItemLabel" >[% expander.Label %]</label>
+						<section>
+						[% IF expander.DefaultOn == 'y' %]
+							<input name="[% expander.Id %]" checked="checked" id="[% expander.Id %]" type="checkbox" value="[% expander.AddAction %]">
+						[% ELSE %]
+							<input name="[% expander.Id %]" id="[% expander.Id %]" type="checkbox" value="[% expander.AddAction %]">
+						[% END %]
+						</section>
+					</li>
+					[% END %]	
+					
+				  </ul>
+				</dd>
+			  </dl>
 			</fieldset>
 			</p>
 			<p>
@@ -110,11 +125,43 @@
 								[% IF advlimiter.DefaultOn == 'y' %]
 									<input name="[% advlimiter.Id %]" checked="checked" id="[% advlimiter.Id %]" type="checkbox" value="[% advlimiter.AddAction %]">
 								[% ELSE %]
-									<input name="[% advlimiter.Id %]" id="[% advlimiter.Id %]" type="checkbox" value="[% advlimiter.AddAction %]">
+									<input name="[% advlimiter.Id %]" id="[% advlimiter.Id %]" type="checkbox" value="[% advlimiter.AddAction %]" class="advSB">
 								[% END %]
 							[% END %]
 							[% IF advlimiter.Type =='ymrange' %]
-								<input title="Enter a date range and press Enter or clear this textbox to remove the date limiter." type="text" style="width:95%;text-align:center;" placeholder="YYYY-MM/YYYY-MM" data-action="[% advlimiter.AddAction %]" >
+								<select name="common_DT1" id="common_DT1" title="Date Published"  class="advSB">
+									<option selected="selected" value="">Month</option>
+									<option value="01">January</option>
+									<option value="02">February</option>
+									<option value="03">March</option>
+									<option value="04">April</option>
+									<option value="05">May</option>
+									<option value="06">June</option>
+									<option value="07">July</option>
+									<option value="08">August</option>
+									<option value="09">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+								Year: <input size="4" maxlength="4" title="" type="text" id="common_DT1_FromYear" placeholder="YYYY" data-action="[% advlimiter.AddAction %]"  class="advSB">
+								-
+								<select name="common_DT1_ToMonth" id="common_DT1_ToMonth" title="Date Published"  class="advSB">
+									<option selected="selected" value="">Month</option>
+									<option value="01">January</option>
+									<option value="02">February</option>
+									<option value="03">March</option>
+									<option value="04">April</option>
+									<option value="05">May</option>
+									<option value="06">June</option>
+									<option value="07">July</option>
+									<option value="08">August</option>
+									<option value="09">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+								Year: <input size="4" maxlength="4" title="" type="text" id="common_DT1_ToYear" placeholder="YYYY" data-action="[% advlimiter.AddAction %]"  class="advSB" >
 							[% END %]
 							[% IF advlimiter.Type =='text' %]
 								<input title="[% advlimiter.Label %]" type="text" style="width:95%;text-align:left;" data-action="[% advlimiter.AddAction %]" >
@@ -140,44 +187,6 @@
 		</div>
 		</form>
 	</div>
-
-<script>
-function AdvSearchEDS(){
-	var advQuery="";
-	for(sbCount=1;sbCount<=searchBlockCount;sbCount++){
-		var advBool=$("#searchFields_"+sbCount+" .advBool").val(); if(advBool==undefined){advBool="AND";}
-		var advKi=$("#searchFields_"+sbCount+" .advFieldCode").val();
-		var advTerm=$("#searchFields_"+sbCount+" .advInput").val(); if(advTerm==undefined){advTerm="";}
-	
-		if(advTerm.length>1)
-			advQuery+="query-"+sbCount+"="+advBool+","+advKi+":{"+advTerm+"}|";
-	}
-	
-	$("input:not(.advSB)").each(function(index,value){
-
-		if(jQuery(this).attr("type")=="checkbox" || jQuery(this).attr("type")=="radio"){
-			if(jQuery(this).is(":checked")){
-				jQuery(this).val(jQuery(this).val().replace(":value",":y"));
-				advQuery+="action="+jQuery(this).val()+"|";
-			}
-		}else if(jQuery(this).attr("type")=="text"){
-			if(jQuery(this).val().length>1 && jQuery(this).val()!="YYYY-MM/YYYY-MM"){
-				jQuery(this).attr("data-action",jQuery(this).attr("data-action").replace(":value",":"+jQuery(this).val()));
-				advQuery+="action="+jQuery(this).attr("data-action")+"|";
-			}
-		}
-	});
-	
-	$("select:not(.advSB) option:selected").each(function(index,value){
-			advQuery+="action="+$(this).val()+"|";
-	});
-	
-	window.location.href="eds-search.pl?q=Search?"+advQuery;
-	//alert(advQuery);
-	
-	
-}
-</script>
 
 </div>
 
